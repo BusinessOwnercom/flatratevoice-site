@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.flatratevoice.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.flatratevoice.com/hvac.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.flatratevoice.com/plumbing.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.flatratevoice.com/medspa.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.flatratevoice.com/roofing.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.flatratevoice.com/dental.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.flatratevoice.com/legal.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.flatratevoice.com/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.flatratevoice.com/terms.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+</urlset>
