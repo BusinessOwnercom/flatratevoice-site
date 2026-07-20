@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SMS Consent &amp; Opt-In — FlatRateVoice</title>
+<meta name="robots" content="index,follow"/>
+<meta name="description" content="How FlatRateVoice callers consent to receive a post-call confirmation text message."/>
+<link rel="canonical" href="https://www.flatratevoice.com/consent.html"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#080B0F;--s1:#0E1318;--s2:#141B22;--border:#232E3C;--slate4:#7A8EA6;--slate3:#9BAFC7;--slate2:#C4D3E3;--white:#F0F5FA;--cyan:#00D4FF;--dsp:'Space Grotesk',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--black);color:var(--slate2);font-family:var(--body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--cyan);text-decoration:none}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+header{padding:22px 0;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--dsp);font-weight:700;font-size:18px;color:var(--white)}
+main{padding:56px 0 80px}
+h1{font-family:var(--dsp);color:var(--white);font-size:34px;margin-bottom:8px;letter-spacing:-.02em}
+.upd{font-size:13px;color:var(--slate4);margin-bottom:28px}
+h2{font-family:var(--dsp);color:var(--white);font-size:20px;margin:32px 0 10px;letter-spacing:-.01em}
+p{margin-bottom:14px}
+ul{margin:0 0 14px 20px}
+li{margin-bottom:7px}
+.note{background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:8px;padding:14px 18px;font-size:13px;color:var(--slate3);margin-bottom:28px}
+.script{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin:18px 0}
+.script .line{margin-bottom:12px}
+.script .who{font-family:var(--dsp);font-weight:600;color:var(--cyan);font-size:13px;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:3px}
+.script .txt{color:var(--white)}
+footer{border-top:1px solid var(--border);padding:24px 0;font-size:13px;color:var(--slate4)}
+footer a{color:var(--slate3)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a href="/index.html" class="logo">
+<svg width="24" height="16" viewBox="0 0 28 20" fill="none" aria-hidden="true"><rect x="4.9" y="5.5" width="1.6" height="9" rx=".8" fill="#00D4FF" opacity=".8"/><rect x="7.1" y="4" width="1.6" height="12" rx=".8" fill="#00D4FF"/><rect x="9.3" y="6" width="1.6" height="8" rx=".8" fill="#00D4FF" opacity=".72"/></svg>
+FlatRateVoice</a></div></header>
+<main><div class="wrap">
+<h1>SMS Consent &amp; Opt-In</h1>
+<div class="upd">Last updated: July 2026</div>
+
+<div class="note">This page documents how callers consent to receive a single post-call confirmation text message from a FlatRateVoice AI voice agent. This is a verbal, on-call opt-in — no website form is involved in this consent flow.</div>
+
+<h2>Who this applies to</h2>
+<p>When a caller phones a business using a FlatRateVoice AI voice agent, the agent answers the call, has a natural conversation, and — before the call ends — verbally asks the caller for permission to send a single text message confirming what was discussed (for example, an appointment time). The caller's spoken response is the opt-in.</p>
+
+<h2>The consent script</h2>
+<p>Every call includes this exchange, spoken by the AI agent, before the call ends:</p>
+<div class="script">
+<div class="line"><span class="who">AI Agent</span><span class="txt">"Before we wrap up — is it okay if we text you a quick confirmation of what we discussed today, like your appointment time? We'll send one message per call, message and data rates may apply, reply STOP to opt out."</span></div>
+<div class="line"><span class="who">Caller</span><span class="txt">"Yes, that works."</span></div>
+<div class="line"><span class="who">AI Agent</span><span class="txt">"Great, you'll get that text in just a moment."</span></div>
+</div>
+
+<h2>What happens with the caller's answer</h2>
+<ul>
+<li>If the caller agrees, the system sends exactly one SMS confirming the details discussed on the call.</li>
+<li>If the caller declines, no text message is sent.</li>
+<li>Message frequency: one message per call, only when consent is given.</li>
+<li>Message and data rates may apply.</li>
+<li>Reply <strong>STOP</strong> at any time to opt out, or <strong>HELP</strong> for help.</li>
+</ul>
+
+<h2>Sample confirmation message</h2>
+<p>"Thanks for calling [Business Name]! We've got your info and will follow up shortly. Call us back at [Business Phone]. Reply STOP to unsubscribe."</p>
+
+<h2>Data use</h2>
+<p>Phone numbers collected through this flow are used only to send the single opt-in confirmation text described above. We do not sell this information. See our <a href="/privacy.html">Privacy Policy</a> for full details.</p>
+
+</div></main>
+<footer><div class="wrap">&copy; 2026 FlatRateVoice. <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Service</a></div></footer>
+</body>
+</html>
