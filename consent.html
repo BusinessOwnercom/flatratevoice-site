@@ -47,12 +47,14 @@ FlatRateVoice</a></div></header>
 <p>When a caller phones a business using a FlatRateVoice AI voice agent, the agent answers the call, has a natural conversation, and — before the call ends — verbally asks the caller for permission to send a single text message confirming what was discussed (for example, an appointment time). The caller's spoken response is the opt-in.</p>
 
 <h2>The consent script</h2>
+<div class="note">This is a verbal opt-in collected live on the phone call — there is no web form or checkbox involved, because the caller never visits a website. The AI agent asks the question below out loud and listens for the caller's spoken answer.</div>
 <p>Every call includes this exchange, spoken by the AI agent, before the call ends:</p>
 <div class="script">
 <div class="line"><span class="who">AI Agent</span><span class="txt">"Before we wrap up — is it okay if we text you a quick confirmation of what we discussed today, like your appointment time? We'll send one message per call, message and data rates may apply, reply HELP for help, reply STOP to opt out."</span></div>
 <div class="line"><span class="who">Caller</span><span class="txt">"Yes, that works."</span></div>
 <div class="line"><span class="who">AI Agent</span><span class="txt">"Great, you'll get that text in just a moment."</span></div>
 </div>
+<p style="font-size:13px;color:var(--slate4)">This consent flow is governed by our <a href="/privacy.html">Privacy Policy</a> and <a href="/terms.html">Terms of Service</a>.</p>
 
 <h2>What happens with the caller's answer</h2>
 <ul>
