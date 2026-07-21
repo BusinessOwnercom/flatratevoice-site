@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>SMS Consent &amp; Opt-In — FlatRateVoice</title>
 <meta name="robots" content="index,follow"/>
-<meta name="description" content="How FlatRateVoice callers consent to receive a post-call confirmation text message."/>
+<meta name="description" content="How callers to FlatRateVoice consent to receive a post-call confirmation text message."/>
 <link rel="canonical" href="https://www.flatratevoice.com/consent.html"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
@@ -25,10 +25,15 @@ p{margin-bottom:14px}
 ul{margin:0 0 14px 20px}
 li{margin-bottom:7px}
 .note{background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:8px;padding:14px 18px;font-size:13px;color:var(--slate3);margin-bottom:28px}
+.identity{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:28px;display:flex;flex-wrap:wrap;gap:24px}
+.identity div{font-size:14px}
+.identity span{display:block;color:var(--slate4);font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.identity strong{color:var(--white);font-weight:600}
 .script{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin:18px 0}
 .script .line{margin-bottom:12px}
 .script .who{font-family:var(--dsp);font-weight:600;color:var(--cyan);font-size:13px;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:3px}
 .script .txt{color:var(--white)}
+.sms-example{background:var(--s1);border:1px solid var(--cyan);border-radius:10px;padding:18px 22px;margin:14px 0;color:var(--white)}
 footer{border-top:1px solid var(--border);padding:24px 0;font-size:13px;color:var(--slate4)}
 footer a{color:var(--slate3)}
 </style>
@@ -41,38 +46,42 @@ FlatRateVoice</a></div></header>
 <h1>SMS Consent &amp; Opt-In</h1>
 <div class="upd">Last updated: July 2026</div>
 
-<div class="note">This page documents how callers consent to receive a single post-call confirmation text message from a FlatRateVoice AI voice agent. This is a verbal, on-call opt-in — no website form is involved in this consent flow.</div>
+<div class="note">This is a verbal opt-in collected live on the phone call — there is no web form or checkbox, because the caller never visits a website. The AI agent asks the question out loud and listens for the caller's spoken answer. Below is the actual, complete flow for one real number.</div>
 
-<h2>Who this applies to</h2>
-<p>When a caller phones a business using a FlatRateVoice AI voice agent, the agent answers the call, has a natural conversation, and — before the call ends — verbally asks the caller for permission to send a single text message confirming what was discussed (for example, an appointment time). The caller's spoken response is the opt-in.</p>
-
-<h2>The consent script</h2>
-<div class="note">This is a verbal opt-in collected live on the phone call — there is no web form or checkbox involved, because the caller never visits a website. The AI agent asks the question below out loud and listens for the caller's spoken answer.</div>
-<p>Every call includes this exchange, spoken by the AI agent, before the call ends:</p>
-<div class="script">
-<div class="line"><span class="who">AI Agent</span><span class="txt">"Before we wrap up — is it okay if we text you a quick confirmation of what we discussed today, like your appointment time? We'll send one message per call, message and data rates may apply, reply HELP for help, reply STOP to opt out."</span></div>
-<div class="line"><span class="who">Caller</span><span class="txt">"Yes, that works."</span></div>
-<div class="line"><span class="who">AI Agent</span><span class="txt">"Great, you'll get that text in just a moment."</span></div>
+<div class="identity">
+<div><span>Business</span><strong>FlatRateVoice</strong></div>
+<div><span>Number</span><strong>+1 (877) 766-3190</strong></div>
+<div><span>Answered by</span><strong>Alex, AI voice agent</strong></div>
 </div>
-<p style="font-size:13px;color:var(--slate4)">This consent flow is governed by our <a href="/privacy.html">Privacy Policy</a> and <a href="/terms.html">Terms of Service</a>.</p>
+
+<h2>The complete flow</h2>
+<p>When a caller phones <strong>+1 (877) 766-3190</strong>, Alex — FlatRateVoice's AI voice agent — answers immediately and has a natural conversation. Before the call ends, Alex verbally asks for permission to send one text message. The caller's spoken answer is the opt-in.</p>
+
+<div class="script">
+<div class="line"><span class="who">Alex (AI Agent)</span><span class="txt">"Before we wrap up — is it okay if we text you a link to get started, or a quick recap of what we covered? We'll send one message, message and data rates may apply, reply HELP for help, reply STOP to opt out."</span></div>
+<div class="line"><span class="who">Caller</span><span class="txt">"Yes, that works."</span></div>
+<div class="line"><span class="who">Alex (AI Agent)</span><span class="txt">"Great, you'll get that text in just a moment."</span></div>
+</div>
 
 <h2>What happens with the caller's answer</h2>
 <ul>
-<li>If the caller agrees, the system sends exactly one SMS confirming the details discussed on the call.</li>
-<li>If the caller declines, no text message is sent.</li>
-<li>Message frequency: one message per call, only when consent is given.</li>
+<li>If the caller says yes, FlatRateVoice sends exactly one SMS to that caller.</li>
+<li>If the caller declines or doesn't give a clear yes, no text is sent — the call still ends normally.</li>
+<li>Message frequency: one message, only when consent is given.</li>
 <li>Message and data rates may apply.</li>
 <li>Reply <strong>STOP</strong> at any time to opt out, or <strong>HELP</strong> for help.</li>
 </ul>
 
-<h2>Sample confirmation message</h2>
-<p>"Thanks for calling [Business Name]! We've got your info and will follow up shortly. Call us back at [Business Phone]. Reply STOP to unsubscribe."</p>
+<h2>The actual confirmation message sent</h2>
+<div class="sms-example">"Thanks for calling FlatRateVoice! We've got your info and will follow up shortly. Call us back at +18777663190. Reply STOP to unsubscribe."</div>
+<p style="font-size:13px;color:var(--slate4)">This is the exact message template used in production for this number — not a placeholder.</p>
 
 <h2>How consent is recorded</h2>
-<p>The AI agent listens for the caller's spoken answer to the consent question above. That answer is captured as a structured yes/no signal in the call system in real time — not inferred or guessed. The confirmation text is sent only when that signal is affirmative. If the caller says no, declines, or doesn't give a clear yes, no text is sent and the call still completes normally.</p>
+<p>Alex listens for the caller's spoken answer to the consent question above. That answer is captured as a structured yes/no signal in the call system in real time — not inferred or guessed. The confirmation text is sent only when that signal is affirmative.</p>
 
 <h2>Data use</h2>
 <p>Phone numbers collected through this flow are used only to send the single opt-in confirmation text described above. We do not sell this information. See our <a href="/privacy.html">Privacy Policy</a> for full details.</p>
+<p style="font-size:13px;color:var(--slate4)">This consent flow is governed by our <a href="/privacy.html">Privacy Policy</a> and <a href="/terms.html">Terms of Service</a>.</p>
 
 </div></main>
 <footer><div class="wrap">&copy; 2026 FlatRateVoice. <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Service</a></div></footer>
