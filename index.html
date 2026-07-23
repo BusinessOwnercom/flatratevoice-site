@@ -1103,6 +1103,16 @@ function showFormOK(){
       // playback later if getUserMedia (or anything else) is awaited first.
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       audioCtx.resume();
+      // Safari specifically requires an actual buffer to be started
+      // synchronously within the gesture -- resume() alone does not
+      // reliably unlock audio output on WebKit. This silent nudge buffer
+      // satisfies that requirement so later async-scheduled playback
+      // actually produces sound.
+      var unlockBuf = audioCtx.createBuffer(1, 1, 22050);
+      var unlockSrc = audioCtx.createBufferSource();
+      unlockSrc.buffer = unlockBuf;
+      unlockSrc.connect(audioCtx.destination);
+      unlockSrc.start(0);
       var nativeRate = audioCtx.sampleRate;
       stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
 
