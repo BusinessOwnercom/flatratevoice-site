@@ -1097,10 +1097,14 @@ function showFormOK(){
   talkBtn.onclick = async function(){
     if (ws){ await stopTalk('Stopped'); return; }
     try{
-      stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+      // AudioContext must be created and resumed synchronously within the
+      // click handler, before any await -- Chrome breaks the user-gesture
+      // link across an await boundary and will silently block audio
+      // playback later if getUserMedia (or anything else) is awaited first.
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      await audioCtx.resume();
+      audioCtx.resume();
       var nativeRate = audioCtx.sampleRate;
+      stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
 
       if ('wakeLock' in navigator){ try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e){} }
 
@@ -1139,7 +1143,7 @@ function showFormOK(){
       };
       ws.onerror = function(){ stopTalk('Connection error'); };
     } catch(err){
-      talkStatus.textContent = 'Mic access needed: ' + err.message;
+      talkStatus.textContent = err.name + ': ' + err.message;
     }
   };
 })();
