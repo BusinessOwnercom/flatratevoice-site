@@ -211,6 +211,9 @@ section.alt{background:var(--s1)}
 .btn-start:hover{opacity:.85}
 .btn-reset{padding:7px 14px;background:transparent;border:1px solid var(--borderlit);border-radius:8px;color:var(--slate2);font-size:13px;cursor:pointer;margin-left:auto}
 .done-msg{font-size:14px;color:#44DD88;font-weight:500}
+.talk-pill{padding:7px 16px;background:transparent;border:1px solid var(--borderlit);border-radius:100px;color:var(--slate2);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.talk-pill:hover{border-color:var(--cyan);color:var(--white)}
+.talk-pill.active{background:var(--cyan);border-color:var(--cyan);color:var(--black);font-weight:700}
 .prow{display:flex;align-items:center;gap:10px}
 .pring{position:relative;width:10px;height:10px;flex-shrink:0}
 .pring::before{content:'';position:absolute;inset:0;border-radius:50%;background:var(--cyan);opacity:.3;animation:ping 1.2s cubic-bezier(0,0,.2,1) infinite}
@@ -476,21 +479,26 @@ footer{padding:44px 0 28px;background:var(--s1);border-top:1px solid var(--borde
     <p style="text-align:center;margin-top:18px;font-size:13px;color:var(--slate4)">Plumbing configuration shown. Each vertical has its own qualification logic and routing rules.</p>
   </div>
 </section>
-<!-- ═══════════ OPTIONAL: EMBEDDED LIVE VOICE WIDGET (#91) ═══════════
-   Let visitors TALK to the agent, not just watch the demo.
-   GHL: Sites -> Chat/Voice Widget -> Style tab -> placement Embedded/Inline
-   -> Avatar or Visualizer -> size -> Get Code. Paste the div/iframe snippet
-   where marked below, then delete this opening comment line and the closing
-   comment line to activate the section.
-<section id="talk">
+<section id="talk" class="alt" aria-labelledby="talk-heading">
   <div class="wrap" style="text-align:center;max-width:640px">
     <div class="eye">Try It Live</div>
-    <h2 style="font-size:clamp(24px,3.5vw,40px);margin-bottom:14px">Talk to the agent yourself.</h2>
-    <p style="font-size:16px;color:var(--slate2);margin-bottom:28px">Ask it what your clients' callers would ask. Same agent, live.</p>
-    <!-- >>> PASTE GHL EMBEDDED VOICE WIDGET CODE HERE <<< -->
+    <h2 id="talk-heading" style="font-size:clamp(24px,3.5vw,40px);margin-bottom:14px">Talk to the agent yourself.</h2>
+    <p style="font-size:16px;color:var(--slate2);margin-bottom:28px">Ask it what your clients' callers would ask. Same architecture, live -- pick a vertical or just start talking.</p>
+    <div id="talkPills" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px"></div>
+    <div class="panel" style="max-width:420px;margin:0 auto">
+      <div class="panel-hd">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="sdot" id="talkDot" aria-hidden="true"></div>
+          <span style="font-size:13px;font-weight:500;color:var(--slate2)" id="talkStatus">Ready</span>
+        </div>
+      </div>
+      <div class="demo-foot" style="justify-content:center">
+        <button class="btn-start" id="talkBtn">Start Talking</button>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--slate4);margin-top:14px">Mic access required. One live demo per visitor per hour, capped at 3 minutes.</p>
   </div>
 </section>
-   ═══════════ END EMBEDDED VOICE WIDGET ═══════════ -->
 <!-- ── WHY FLAT RATE ── -->
 <section id="why" aria-labelledby="why-heading">
   <div class="wrap">
@@ -1003,6 +1011,138 @@ function submitForm(){
 function showFormOK(){
   document.getElementById('formWrap').innerHTML='<div class="fok"><div class="bck">✓</div><p>We will reach out today.</p><small>Check your inbox. If you do not hear within a few hours, email hello@flatratevoice.com directly.</small></div>'
 }
+</script>
+<script>
+(function(){
+  var VERTICALS = [
+    {v:'generic', label:'Generic'},
+    {v:'hvac', label:'HVAC'},
+    {v:'plumbing', label:'Plumbing'},
+    {v:'roofing', label:'Roofing'},
+    {v:'electrical', label:'Electrical'},
+    {v:'med_spa', label:'Med Spa'},
+    {v:'dental', label:'Dental'},
+    {v:'legal_intake', label:'Legal Intake'},
+    {v:'property_management', label:'Property Mgmt'}
+  ];
+  var selectedVertical = 'generic';
+  var pillsEl = document.getElementById('talkPills');
+  if (pillsEl) {
+    VERTICALS.forEach(function(item){
+      var btn = document.createElement('button');
+      btn.className = 'talk-pill' + (item.v === selectedVertical ? ' active' : '');
+      btn.textContent = item.label;
+      btn.onclick = function(){
+        selectedVertical = item.v;
+        document.querySelectorAll('.talk-pill').forEach(function(p){ p.classList.remove('active'); });
+        btn.classList.add('active');
+      };
+      pillsEl.appendChild(btn);
+    });
+  }
+
+  var talkBtn = document.getElementById('talkBtn');
+  var talkDot = document.getElementById('talkDot');
+  var talkStatus = document.getElementById('talkStatus');
+  if (!talkBtn) return;
+
+  var ws, audioCtx, processor, source, stream, wakeLock;
+  var audioQueue = [];
+  var isPlaying = false;
+  var nextStartTime = 0;
+
+  function downsample(buffer, fromRate, toRate){
+    if (fromRate === toRate) return buffer;
+    var ratio = fromRate / toRate;
+    var newLen = Math.round(buffer.length / ratio);
+    var result = new Float32Array(newLen);
+    for (var i = 0; i < newLen; i++){
+      var start = Math.floor(i * ratio);
+      var end = Math.min(Math.floor((i + 1) * ratio), buffer.length);
+      var sum = 0, count = 0;
+      for (var j = start; j < end; j++){ sum += buffer[j]; count++; }
+      result[i] = count > 0 ? sum / count : 0;
+    }
+    return result;
+  }
+
+  function playQueue(){
+    if (isPlaying || audioQueue.length === 0) return;
+    isPlaying = true;
+    var float = audioQueue.shift();
+    var buf = audioCtx.createBuffer(1, float.length, 24000);
+    buf.copyToChannel(float, 0);
+    var src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    src.connect(audioCtx.destination);
+    var t = Math.max(audioCtx.currentTime, nextStartTime);
+    src.start(t);
+    nextStartTime = t + buf.duration;
+    src.onended = function(){ isPlaying = false; playQueue(); };
+  }
+
+  async function stopTalk(statusText){
+    if (ws){ ws.onclose = null; ws.close(); ws = null; }
+    if (processor){ processor.disconnect(); processor = null; }
+    if (source){ source.disconnect(); source = null; }
+    if (stream){ stream.getTracks().forEach(function(t){ t.stop(); }); stream = null; }
+    if (audioCtx){ await audioCtx.close(); audioCtx = null; }
+    if (wakeLock){ try { await wakeLock.release(); } catch(e){} wakeLock = null; }
+    audioQueue = []; isPlaying = false; nextStartTime = 0;
+    talkBtn.textContent = 'Start Talking';
+    talkDot.className = 'sdot';
+    talkStatus.textContent = statusText || 'Ready';
+  }
+
+  talkBtn.onclick = async function(){
+    if (ws){ await stopTalk('Stopped'); return; }
+    try{
+      stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      await audioCtx.resume();
+      var nativeRate = audioCtx.sampleRate;
+
+      if ('wakeLock' in navigator){ try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e){} }
+
+      source = audioCtx.createMediaStreamSource(stream);
+      processor = audioCtx.createScriptProcessor(4096, 1, 1);
+      var silent = audioCtx.createGain();
+      silent.gain.value = 0;
+      silent.connect(audioCtx.destination);
+      source.connect(processor);
+      processor.connect(silent);
+
+      ws = new WebSocket('wss://api.flatratevoice.com/ws/demo?vertical=' + selectedVertical);
+      ws.binaryType = 'arraybuffer';
+      ws.onopen = function(){ talkStatus.textContent = 'Connected -- say hello'; talkDot.className = 'sdot on'; talkBtn.textContent = 'Stop'; };
+
+      processor.onaudioprocess = function(e){
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        var input = e.inputBuffer.getChannelData(0);
+        var ds = downsample(input, nativeRate, 16000);
+        var pcm = new Int16Array(ds.length);
+        for (var i = 0; i < ds.length; i++) pcm[i] = Math.max(-32768, Math.min(32767, ds[i] * 32768));
+        ws.send(pcm.buffer);
+      };
+
+      ws.onmessage = function(e){
+        var pcm = new Int16Array(e.data);
+        var f = new Float32Array(pcm.length);
+        for (var i = 0; i < pcm.length; i++) f[i] = pcm[i] / 32768;
+        audioQueue.push(f);
+        playQueue();
+      };
+
+      ws.onclose = function(e){
+        if (e.code === 4029){ stopTalk('One demo per visitor per hour -- try again later.'); }
+        else { stopTalk('Call ended'); }
+      };
+      ws.onerror = function(){ stopTalk('Connection error'); };
+    } catch(err){
+      talkStatus.textContent = 'Mic access needed: ' + err.message;
+    }
+  };
+})();
 </script>
 </body>
 </html>
